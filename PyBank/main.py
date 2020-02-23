@@ -43,7 +43,7 @@ with open(budget_csv, 'r', newline="") as csvfile:
         # set initial values to calculate monthly change
         monthly_change = int(row[1]) - prev_net
         # record monthly change to list
-        monthly_profit_list.append('monthly_change')
+        monthly_profit_list = monthly_profit_list + [monthly_change]
         
         # find greatest increase in profits
         if (monthly_change > month_max_profit[1]):
@@ -66,12 +66,19 @@ with open(budget_csv, 'r', newline="") as csvfile:
         # reset prev_net
         prev_net = int(row[1])
     
+# calculate average profit/loss
+avg_profloss = sum(monthly_profit_list)/len(monthly_profit_list)
+# print(avg_profloss)
 
-    # format final table
-    print("Financial Analysis")
-    print("----------------------------")
-    print("Total Months: " + str(months))
-    print("Total: $" + str(profit_loss))
-    print("Average Change: $" + str(avg_profloss))
-    print("Greatest Increase in Profits: " + month_max_profit[0] + " ($" + str(month_max_profit[1]) + ")")
-    print("Greatest Decrease in Profits: " + month_max_loss[0] + " ($" + str(month_max_loss[1]) + ")")
+# format final table
+results = (f"Financial Analysis\n"
+f"----------------------------\n"
+f"Total Months: {months}\n"
+f"Total: ${profit_loss:,}\n"
+f"Average Change: ${avg_profloss:,.2f}\n"
+f"Greatest Increase in Profits: {month_max_profit[0]} ${month_max_profit[1]:,}\n"
+f"Greatest Decrease in Profits: {month_max_loss[0]} ${month_max_loss[1]:,}\n")
+print(results)
+
+with open(output, "w") as txt_file:
+    txt_file.write(results)
