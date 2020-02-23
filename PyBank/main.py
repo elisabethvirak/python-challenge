@@ -27,11 +27,12 @@ with open(budget_csv, 'r', newline="") as csvfile:
     # define values to compare to
     stats = next(csv_reader)
     prev_net = int(stats[1])
+    # include Jan-2010 in count for months and profit_loss
+    months = months + 1
+    profit_loss = profit_loss + int(stats[1])
     
     # iterate through the rows
     for row in csv_reader:
-
-        prev_change = int(prev_net)
 
         # find total profit_loss
         profit_loss = profit_loss + int(row[1])
@@ -40,7 +41,7 @@ with open(budget_csv, 'r', newline="") as csvfile:
         months = months + 1
 
         # set initial values to calculate monthly change
-        monthly_change = int(row[1]) - prev_change
+        monthly_change = int(row[1]) - prev_net
         # record monthly change to list
         monthly_profit_list.append('monthly_change')
         
@@ -61,6 +62,9 @@ with open(budget_csv, 'r', newline="") as csvfile:
 
             # store month of max loss
             month_max_loss[0] = str(row[0])
+        
+        # reset prev_net
+        prev_net = int(row[1])
     
 
     # format final table
